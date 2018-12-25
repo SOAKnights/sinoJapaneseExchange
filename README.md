@@ -1,6 +1,6 @@
-# mall
+# SOA app 中日友好交流展示
 
-> 在线商城
+> webapp
 
 ## Build Setup
 
