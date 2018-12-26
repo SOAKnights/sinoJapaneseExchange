@@ -4,7 +4,7 @@
       <router-link class="content-return" to="/home">
         <i class="iconfont icon-jiantou"></i>
       </router-link>
-      <div @click="readWord(content.wordJa)">
+      <div @click="readWord">
         <p class="content-word-detail">{{content.wordJa}}</p>
         <p class="content-word-read">{{content.roma}}<i class="iconfont icon-laba"></i></p>
         <my-audio ref="myAudio" :word="content.wordJa"></my-audio>
@@ -16,10 +16,13 @@
     <div class="content-detail" @click="checkForDetail">
       <p class="description" v-if="!isVisible">点击屏幕显示中文和例句</p>
       <div class="detail-container" v-else>
-        <div class="detail-group" v-for="" :key="">
-          <p class="detail"></p>
-          <p class="detail"></p>
+        <div class="detail-group" v-for="(sentence,index) in content.sentences" :key="index">
+          <p class="detail">{{sentence.senJa}}</p>
+          <p class="detail">{{sentence.senZh}}</p>
         </div>
+      </div>
+      <div v-if="isVisible" class="img-container">
+        <img :src="content.imgurl" alt="">
       </div>
     </div>
     <div class="content-button-group">
@@ -31,8 +34,8 @@
 
 <script>
   import { getFragments, getWordAudio } from '@/api/content.js';
-  import { MessageBox } from 'mint-ui';
   import MyAudio from 'components/audio';
+  import { MessageBox } from 'mint-ui';
 
   export default {
     name: 'MyContent',
@@ -61,13 +64,7 @@
               this.contents = data;
               this.content = this.contents[this.index];
             } else {
-              MessageBox({
-                title: '提示',
-                message: '你已经学完啦！',
-              })
-                .then(() => {
-                  this.$router.push('/home');
-                });
+              this.hasFinished();
             }
           });
       },
@@ -96,18 +93,21 @@
             this.content = this.contents[this.index];
           }
         } else {
-          MessageBox({
-            title: '提示',
-            message: '你已经学完啦！',
-          })
-            .then(() => {
-              this.$router.push('/home');
-            });
+          this.hasFinished();
         }
 
       },
       readWord() {
         this.$refs.myAudio.readWord();
+      },
+      hasFinished() {
+        this.$messagebox({
+          title: '提示',
+          message: '你已经学完啦！',
+        })
+          .then(() => {
+            this.$router.push('/home');
+          });
       }
     },
     components: {
@@ -181,11 +181,20 @@
 
   .detail-container > .detail-group {
     font-size: 20px;
-
+    margin-bottom: 25px;
   }
 
   .detail-container > .detail-group > p.detail {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+  }
+
+  .img-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .img-container > img {
+    width: 100%;
   }
 
   .content-button-group {

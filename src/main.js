@@ -10,6 +10,10 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
+import { MessageBox } from 'mint-ui';
+import 'mint-ui/lib/style.css';
+Vue.prototype.$messagebox = MessageBox;
+
 // fastclick.attach(document.body);
 
 Vue.config.productionTip = false;

@@ -5,18 +5,13 @@
         <camera-header></camera-header>
       </header>
       <div class="g-content-container">
-        <div class="camera-container" @click="!isVisible && getPhoto()">
+        <div class="camera-container" @click="!isVisible && getSound()">
           <p v-if="!isVisible" class="description">
-            请点击此处选择一张图片
-            <input ref="photo" class="display-none" type="file" accept="image/*" multiple>
+            请点击此处进行录音
+            <input type="file" ref="mySound" class="display-none" accept="audio/*" capture="microphone">
           </p>
           <div v-else>
-            <img class="myImg" :src="file" alt="">
-            <div v-for="(content,index) in contents" :key="index">
-              <p class="content-word-detail" @click="readWord(index)">{{content}}</p>
-              <i class="iconfont icon-laba"></i>
-              <my-audio ref="myAudio" :word="content"></my-audio>
-            </div>
+
           </div>
         </div>
       </div>
@@ -32,43 +27,51 @@
 
 
   export default {
-    name: 'Camera',
+    name: 'Microphone',
     data() {
       return {
-        contents: [],
-        isVisible: false,
-        file: ''
+        content: [],
+        isVisible: false
       };
     },
     mounted() {
-      this.$refs.photo.onchange = () => {
-        filetoDataURL(this.$refs.photo.files[0], (result) => {
-          this.file = result;
+      this.$refs.mySound.onchange = () => {
+        filetoDataURL(this.$refs.mySound.files[0], (result) => {
+          console.log(result, this.$refs.mySound.files[0]);
         });
 
-        postPhoto(this.$refs.photo.files[0])
-          .then((data) => {
-            if (data.length === 0) {
-              this.$messagebox({
-                title: '提示',
-                message: '请确认上传的图片中包含日文',
-              });
-            } else {
-              this.isVisible = true;
-              this.contents = data;
-
-            }
-          });
       };
     },
     methods: {
-      getPhoto() {
+      // 录音
+      getSound() {
+        if (this.hasGetUserMedia()) {
+          //不使用供应商前缀
+          const mediaDevices = navigator.mediaDevices || navigator;
+          mediaDevices.getUserMedia({ audio: true }).then((mediaStream) => {
+            console.log(mediaStream);
 
-        this.$refs.photo.click();
+          }).catch((err) => {
+            if (err) {
+              alert('设备拒绝访问');
+              console.log(err)
+            }
+
+          });
+        }
+        else {
+          alert('您的浏览器不支持getUserMedia方法');
+        }
+        // this.$refs.mySound.click();
       },
       readWord(index) {
 
         this.$refs.myAudio[index].readWord();
+      },
+      hasGetUserMedia() {
+        //请注意:在Opera浏览器中不使用前缀
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia || navigator.msGetUserMedia);
       }
     },
     components: {

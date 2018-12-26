@@ -11,3 +11,13 @@ export default (func, delay = 200) => {
     }, delay);
   };
 };
+
+// 将文件转成流
+export const filetoDataURL = (file,fn) => {
+  var reader = new FileReader();
+  reader.onloadend = (e) => {
+    fn(e.target.result);
+  };
+  reader.readAsDataURL(file);
+};
+

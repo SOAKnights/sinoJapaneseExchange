@@ -4,6 +4,7 @@ import Home from 'pages/home'
 import Content from 'pages/content';
 import Search from 'pages/search';
 import Camera from 'pages/camera';
+import Microphone from 'pages/microphone';
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
       path: '/camera',
       name: 'Camera',
       component: Camera
+    },
+    {
+      path: '/microphone',
+      name: 'Microphone',
+      component: Microphone
     },
     {
       path: '/*',

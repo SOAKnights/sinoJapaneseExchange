@@ -45,6 +45,9 @@
       },
       gotoCamera(){
         this.$router.push('/camera');
+      },
+      gotoMicrophone() {
+        this.$router.push('/microphone');
       }
     }
   };

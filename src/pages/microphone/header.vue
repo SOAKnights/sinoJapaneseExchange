@@ -12,7 +12,7 @@
   import MeNavbar from 'base/navbar';
 
   export default {
-    name: 'CameraHeader',
+    name: 'MicrophoneHeader',
     components: {
       MeNavbar
     },

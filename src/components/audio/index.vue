@@ -1,5 +1,7 @@
 <template>
-  <audio ref="audio" class="display-none" :src="READ_API_URL+word" crossOrigin="anonymous"></audio>
+  <audio ref="audio" class="display-none" :src="READ_API_URL+word" crossOrigin="anonymous">
+    该浏览器不支持audio标签
+  </audio>
 </template>
 
 <script>
@@ -20,6 +22,7 @@
     },
     methods: {
       readWord() {
+
         this.$refs.audio.play();
       }
     }
